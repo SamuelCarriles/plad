@@ -1,0 +1,16 @@
+#plad/v1
+ {:description "A more detailed project layout"
+  :layout
+  [["docs/"
+    ["guides/" "development.md" "contribution.md"]]
+   ["src/"
+    ["my-project/"
+     "core.clj"
+     "database/pool.clj"
+     ["http/"
+      "server.clj"
+      "routes.clj"]
+     ["services/"
+      "auth/login/routes.clj"]]]
+   "deps.edn"
+   "tests.edn"]}
