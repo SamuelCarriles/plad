@@ -3,5 +3,15 @@
    [plad.cli :as cli])
   (:gen-class))
 
+(defn- die! [& msgs]
+  (binding [*out* *err*]
+    (apply println msgs))
+  (System/exit 1))
+
 (defn -main [& args]
-  (cli/dispatch args))
+  (try
+    (cli/dispatch args)
+    (catch clojure.lang.ExceptionInfo e
+      (die! (ex-message e)))
+    (catch Exception e
+      (die! "Unexpected error:" (ex-message e)))))

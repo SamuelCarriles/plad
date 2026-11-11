@@ -18,7 +18,8 @@
   [{:keys [opts]}]
   (-> (:file opts)
       read-layout-config
-      gen/run!))
+      gen/run!)
+  (println "Layout generated successfully!"))
 
 (def table
   [{:cmds ["gen"]
