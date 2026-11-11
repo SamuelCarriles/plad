@@ -1,5 +1,4 @@
-#plad/v1
- {:description "Basic project layout"
+ {:doc "Basic project layout"
   :layout
   ["src/my_project/core.clj"
    "deps.edn"

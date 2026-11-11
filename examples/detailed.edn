@@ -1,5 +1,4 @@
-#plad/v1
- {:description "A more detailed project layout"
+ {:doc "A more detailed project layout"
   :layout
   [["docs/"
     ["guides/" "development.md" "contribution.md"]]
