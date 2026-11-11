@@ -33,6 +33,9 @@
     (printer (s/explain-data spec data))))
 
 (defn layout-config
+  "Validate `config` against the layout config spec.
+Returns `config` unchanged if valid, otherwise throws ex-info with a
+human-readable Expound explanation as the message."
   [config]
   (if (s/valid? ::spec/config config)
     config

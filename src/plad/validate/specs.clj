@@ -3,6 +3,7 @@
             [clojure.string :as str]))
 
 (defn snode?
+  "True if `s` is a valid path: rejects `//` and segments made only of dots/spaces."
   [s]
   (and (not (re-find #"//" s))
        (->> (str/split s #"/")

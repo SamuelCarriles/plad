@@ -3,7 +3,9 @@
    [plad.cli :as cli])
   (:gen-class))
 
-(defn- die! [& msgs]
+(defn- die!
+  "Print `msgs` to stderr and exit the process with status 1."
+  [& msgs]
   (binding [*out* *err*]
     (apply println msgs))
   (System/exit 1))
