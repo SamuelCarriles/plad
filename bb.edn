@@ -1,4 +1,8 @@
-{:paths ["src" "test"]
+{:paths ["src"]
  :deps {expound/expound {:mvn/version "0.9.0"}}
- :tasks {plad {:requires ([plad.core])
-               :task (apply plad.core/-main *command-line-args*)}}}
+ :tasks {test {:doc "Run all tests"
+               :extra-paths ["test"]
+               :extra-deps {io.github.cognitect-labs/test-runner
+                            {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+               :requires ([cognitect.test-runner.api :as runner])
+               :task (runner/test {:dirs ["test"]})}}}
