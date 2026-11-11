@@ -1,3 +1,4 @@
 {:paths ["src" "test"]
+ :deps {expound/expound {:mvn/version "0.9.0"}}
  :tasks {plad {:requires ([plad.core])
                :task (apply plad.core/-main *command-line-args*)}}}

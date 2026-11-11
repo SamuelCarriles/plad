@@ -4,8 +4,9 @@
 
 (defn snode?
   [s]
-  (->> (str/split s #"\/")
-       (every? #(re-matches #"(?![.\s]+$).+" %))))
+  (and (not (re-find #"//" s))
+       (->> (str/split s #"/")
+            (every? #(re-matches #"(?![.\s]+$).+" %)))))
 
 (s/def ::snode (s/and string? snode?))
 
@@ -31,3 +32,8 @@
 (s/def ::layout
   (s/coll-of ::node :kind vector?))
 
+(s/def ::doc string?)
+
+(s/def ::config
+  (s/keys :req-un [::layout]
+          :opt-un [::doc]))

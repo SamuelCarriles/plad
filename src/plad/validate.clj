@@ -1,42 +1,41 @@
 (ns plad.validate
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as str]
+            [expound.alpha :as expound]
             [plad.validate.specs :as spec]))
 
-(defn- path->str [path]
-  (if (empty? path)
-    "(root)"
-    (apply str (map #(str "[" % "]") path))))
+(expound/defmsg `spec/snode?
+  "must be a valid path (no // and no segments with only dots or spaces)")
 
-(defn- best-error
-  [problems]
-  (let [{:keys [in val]} (first problems)
-        preds (set (map :pred problems))
-        ->error-str #(format "Location: %s\n Value: %s\n Message: %s\n" (path->str in) (pr-str val) %)]
+(expound/defmsg ::spec/snode
+  "must be a non-empty string representing a valid path")
 
-    (cond
-      (preds `spec/snode?)
-      (->error-str "is not a valid path")
+(expound/defmsg ::spec/branch
+  "must be a vector where the first element is a directory path and the rest are nodes")
 
-      (preds `string?)
-      (->error-str "is not a string")
+(expound/defmsg ::spec/node
+  "must be a path string or a vector (directory with children)")
 
-      :else
-      (->error-str "is not a valid node"))))
+(expound/defmsg ::spec/layout
+  "must be a vector of nodes")
 
-(defn layout
-  [data]
-  (if-let [problems (-> (s/explain-data ::spec/layout data)
-                        ::s/problems)]
-    (let [grouped  (group-by :in problems)
-          messages (mapv best-error (vals grouped))
-          n        (count messages)
-          errors (map #(format "%s\n" %)
-                      messages)
-          report (str (format "\n Error%s count: %d\n\n" (if (= n 1) "" "s") n)
-                      (str/join "\n" errors)
-                      "\n")]
-      (throw (ex-info report {:count n
-                              :errors errors
-                              :layout data})))
-    data))
+(expound/defmsg ::spec/doc
+  "must be a string")
+
+(expound/defmsg ::spec/config
+  "must be a map with a required :layout key and an optional :doc key")
+
+(def ^:private printer
+  (expound/custom-printer {:print-specs? false
+                           :theme :none}))
+
+(defn- explain-str [spec data]
+  (with-out-str
+    (printer (s/explain-data spec data))))
+
+(defn layout-config
+  [config]
+  (if (s/valid? ::spec/config config)
+    config
+    (throw (ex-info (explain-str ::spec/config config)
+                    {:config config}))))
+
