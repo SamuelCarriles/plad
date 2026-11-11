@@ -4,6 +4,7 @@
    [babashka.fs :as fs]
    [plad.validate :as validate]
    [plad.cli.gen :as gen]
+   [plad.cli.validate :as validate-cli]
    [babashka.cli :as cli]))
 
 (defn read-config
@@ -18,8 +19,14 @@ missing or the config fails validation."
                           edn/read-string
                           validate/layout-config)))
 
+(defn wrap-handler
+  [handler]
+  (fn [{:keys [opts]}]
+    (-> opts read-config handler)))
+
 (def table
-  [(gen/command read-config)])
+  [(gen/command wrap-handler)
+   (validate-cli/command wrap-handler)])
 
 (defn dispatch
   "Dispatch CLI `args` to the matching subcommand in `table`."

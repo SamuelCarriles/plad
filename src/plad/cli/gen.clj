@@ -4,7 +4,7 @@
    [plad.parse :as parse]
    [plad.generate :as gen]))
 
-(defn run! 
+(defn run!
   "Run the gen command: build entries and create them (or preview if `:dry-run`)."
   [{:keys [config dry-run output]}]
   (let [entries (-> config
@@ -14,13 +14,10 @@
       (gen/preview! entries)
       (gen/layout! entries))))
 
-(defn- handler
-  [reader {:keys [opts]}]
-  (-> opts reader run!))
-
 (defn command
-  "Build the babashka.cli spec for `gen`. `reader` transforms opts into run! input."
-  [reader]
+  "Build the babashka.cli spec for `gen`.
+  `wrapper` adapts the handler shape (see plad.cli/wrap-handler)."
+  [wrapper]
   {:cmds ["gen"]
    :doc "Generate a directory layout from an EDN file"
    :spec {:file {:desc "Layout configuration file (.edn)"
@@ -33,4 +30,4 @@
                    :default "."
                    :alias :o}}
    :args->opts [:file]
-   :fn (partial handler reader)})
+   :fn (wrapper run!)})

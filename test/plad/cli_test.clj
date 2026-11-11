@@ -45,3 +45,12 @@
       (is (true? (:dry-run result)))
       (is (= "/tmp/foo" (:output result)))
       (is (= {:layout ["deps.edn"]} (:config result))))))
+
+(deftest wrap-handler-test
+  (testing "reads config and passes it to the inner handler"
+    (spit *tmp-file* "{:layout [\"deps.edn\"]}")
+    (let [captured (atom nil)
+          wrapped (cli/wrap-handler #(reset! captured %))]
+      (wrapped {:opts {:file *tmp-file*}})
+      (is (= {:layout ["deps.edn"]} (:config @captured)))
+      (is (= *tmp-file* (:file @captured))))))
