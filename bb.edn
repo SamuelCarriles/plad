@@ -5,4 +5,11 @@
                :extra-deps {io.github.cognitect-labs/test-runner
                             {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
                :requires ([cognitect.test-runner.api :as runner])
-               :task (runner/test {:dirs ["test"]})}}}
+               :task (runner/test {:dirs ["test"]})}
+
+         build {:doc "Build plad uberscript"
+                :task (do
+                        (shell "bb uberscript plad -m plad.core")
+                        (let [content (slurp "plad")]
+                          (spit "plad" (str "#!/usr/bin/env bb\n" content)))
+                        (shell "chmod +x plad"))}}}
