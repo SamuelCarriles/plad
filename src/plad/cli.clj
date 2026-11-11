@@ -6,7 +6,7 @@
    [plad.cli.gen :as gen]
    [babashka.cli :as cli]))
 
-(defn- read-config
+(defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
 Returns `data` with `:config` assoc'd. Throws ex-info if the file is
 missing or the config fails validation."
