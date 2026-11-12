@@ -4,7 +4,7 @@
             [plad.parse :as parse]
             [plad.check :as check]))
 
-(defn- missing?
+(defn missing?
   [checked]
   (some #(= :missing (:status %)) checked))
 
