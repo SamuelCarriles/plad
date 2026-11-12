@@ -3,8 +3,9 @@
    [clojure.edn :as edn]
    [babashka.fs :as fs]
    [plad.validate :as validate]
-   [plad.cli.gen :as gen]
+   [plad.cli.gen :as gen-cli]
    [plad.cli.validate :as validate-cli]
+   [plad.cli.check :as check-cli]
    [babashka.cli :as cli]))
 
 (defn read-config
@@ -25,8 +26,9 @@ missing or the config fails validation."
     (-> opts read-config handler)))
 
 (def table
-  [(gen/command wrap-handler)
-   (validate-cli/command wrap-handler)])
+  [(gen-cli/command wrap-handler)
+   (validate-cli/command wrap-handler)
+   (check-cli/command wrap-handler)])
 
 (defn dispatch
   "Dispatch CLI `args` to the matching subcommand in `table`."
