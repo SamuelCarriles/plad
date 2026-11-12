@@ -4,6 +4,10 @@
             [plad.parse :as parse]
             [plad.check :as check]))
 
+(defn- missing?
+  [checked]
+  (some #(= :missing (:status %)) checked))
+
 (defn run!
   "Run the check command: compare the layout against the target directory.
   Exits with status 1 if any entry is missing."
@@ -19,7 +23,7 @@
     (println (format "Checking layout against %s" target-dir))
     (println)
     (check/report! checked)
-    (when (some #(= :missing (:status %)) checked)
+    (when (missing? checked)
       (System/exit 1))))
 
 (defn command
