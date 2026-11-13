@@ -44,7 +44,7 @@ bbin install io.github.SamuelCarriles/plad --latest-tag
 Download the uberscript from the latest release:
 
 ```bash
-curl -L https://github.com/SamuelCarriles/plad/releases/latest/download/plad -o plad
+curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha/plad -o plad
 chmod +x plad
 ```
 
