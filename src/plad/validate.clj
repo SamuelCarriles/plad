@@ -3,11 +3,11 @@
             [expound.alpha :as expound]
             [plad.validate.specs :as spec]))
 
-(expound/defmsg `spec/snode?
-  "must be a valid path (no // and no segments with only dots or spaces)")
-
-(expound/defmsg ::spec/snode
+(expound/defmsg ::spec/str-node
   "must be a non-empty string representing a valid path")
+
+(expound/defmsg ::spec/dir-node
+  "must be a directory path ending with '/' (e.g. \"src/\")")
 
 (expound/defmsg ::spec/branch
   "must be a vector where the first element is a directory path and the rest are nodes")

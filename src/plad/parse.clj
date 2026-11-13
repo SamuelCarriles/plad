@@ -3,7 +3,7 @@
    [babashka.fs :as fs]
    [clojure.string :as str]))
 
-(defn- dir-node?
+(defn dir-node?
   [s]
   (str/ends-with? s "/"))
 
