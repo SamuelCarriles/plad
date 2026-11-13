@@ -1,4 +1,4 @@
-# PLAD — Project Layout As Data
+# plad — Project Layout As Data
 
 Materialize directory structures and files from EDN blueprints.
 
