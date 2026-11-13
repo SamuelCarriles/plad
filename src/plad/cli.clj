@@ -10,7 +10,7 @@
    [plad.cli.version :as version-cli]
    [plad.validate :as validate]))
 
-(def version "0.1.0-alpha")
+(def version "0.1.0-alpha.1")
 
 (defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
