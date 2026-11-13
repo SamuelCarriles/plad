@@ -1,27 +1,21 @@
 (ns plad.validate.specs
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as str]))
+            [plad.node :as node]))
 
-(defn snode?
-  "True if `s` is a valid path: rejects `//` and segments made only of dots/spaces."
-  [s]
-  (and (not (re-find #"//" s))
-       (->> (str/split s #"/")
-            (every? #(re-matches #"(?![.\s]+$).+" %)))))
-
-(s/def ::snode (s/and string? snode?))
+(s/def ::str-node node/str-node?)
+(s/def ::dir-node node/dir-node?)
 
 (s/def ::branch
   (s/and vector?
          (s/cat
-          :dir ::snode
+          :dir ::dir-node
           :children (s/* ::node))))
 
 (defmulti node-type class)
 
 (defmethod node-type String
   [_]
-  ::snode)
+  ::str-node)
 
 (defmethod node-type clojure.lang.IPersistentVector
   [_]

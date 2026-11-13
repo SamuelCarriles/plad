@@ -69,4 +69,11 @@
 
   (testing "vector node with invalid child"
     (is (thrown? clojure.lang.ExceptionInfo
-                 (validate/layout-config {:layout [["src/" 123]]})))))
+                 (validate/layout-config {:layout [["src/" 123]]}))))
+
+  (testing "branch head without trailing /"
+    (are [config] (thrown? clojure.lang.ExceptionInfo
+                           (validate/layout-config config))
+      {:layout [["src" "core.clj"]]}
+      {:layout [["src/" ["utils" "helper.clj"]]]}
+      {:layout [["a/" ["b/" ["c" "d.clj"]]]]})))
