@@ -1,5 +1,6 @@
 .clj-kondo/
 .direnv/
 .lsp/
+.cpcache/
 .nrepl-port
 /plad

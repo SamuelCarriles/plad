@@ -14,15 +14,34 @@ verify project skeletons.
 
 ## Install
 
-`plad` is distributed as a [Babashka](https://babashka.org) uberscript.
+`plad` runs on [Babashka](https://babashka.org), so you need it installed
+first. See [Babashka's install
+guide](https://github.com/babashka/babashka#installation).
 
-### Prerequisites
+### With bbin (recommended)
 
-Install [Babashka](https://github.com/babashka/babashka#installation).
+[bbin](https://github.com/babashka/bbin) installs Babashka scripts as
+first-class commands:
 
-### Download
+```bash
+bbin install io.github.SamuelCarriles/plad --latest-tag
+```
 
-Grab the latest release:
+Verify:
+
+```bash
+plad version
+```
+
+To upgrade later:
+
+```bash
+bbin install io.github.SamuelCarriles/plad --latest-tag
+```
+
+### Manual
+
+Download the uberscript from the latest release:
 
 ```bash
 curl -L https://github.com/SamuelCarriles/plad/releases/latest/download/plad -o plad
@@ -38,7 +57,7 @@ mv plad ~/.local/bin/
 Verify:
 
 ```bash
-plad --help
+plad version
 ```
 
 ## Quick start
@@ -83,17 +102,6 @@ plad gen layout.edn -d                # dry run: print what would be created
 
 Files that already exist are left untouched.
 
-### `validate`
-
-Check that a layout file is well-formed.
-
-```bash
-plad validate layout.edn
-```
-
-Exits with status 0 if valid, 1 otherwise. Errors are reported with
-[Expound](https://github.com/bhb/expound).
-
 ### `check`
 
 Compare a layout against the filesystem.
@@ -105,6 +113,25 @@ plad check layout.edn -t /tmp/foo      # check against a specific directory
 
 Prints each entry with its status (`[exists]` or `[missing]`) and a summary.
 Exits with status 0 if everything is present, 1 if anything is missing.
+
+### `validate`
+
+Check that a layout file is well-formed.
+
+```bash
+plad validate layout.edn
+```
+
+Exits with status 0 if valid, 1 otherwise. Errors are reported with
+[Expound](https://github.com/bhb/expound).
+
+### `version`
+
+Print the installed `plad` version.
+
+```bash
+plad version
+```
 
 ## Layout file format
 
