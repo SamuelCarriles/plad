@@ -1,12 +1,14 @@
 (ns plad.cli
   (:require
-   [clojure.edn :as edn]
+
    [babashka.fs :as fs]
-   [plad.validate :as validate]
+   [babashka.cli :as cli]
+   [clojure.edn :as edn]
+   [plad.cli.check :as check-cli]
    [plad.cli.gen :as gen-cli]
    [plad.cli.validate :as validate-cli]
-   [plad.cli.check :as check-cli]
-   [babashka.cli :as cli]))
+   [plad.cli.version :as version-cli]
+   [plad.validate :as validate]))
 
 (defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
@@ -27,8 +29,9 @@ missing or the config fails validation."
 
 (def table
   [(gen-cli/command wrap-handler)
+   (check-cli/command wrap-handler)
    (validate-cli/command wrap-handler)
-   (check-cli/command wrap-handler)])
+   (version-cli/command)])
 
 (defn dispatch
   "Dispatch CLI `args` to the matching subcommand in `table`."
