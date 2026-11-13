@@ -182,3 +182,10 @@ Build the uberscript:
 ```bash
 bb build
 ```
+## FAQ
+
+**How is this different from deps-new?**
+
+deps-new generates Clojure projects from templates, including file contents.
+plad declares any directory structure as data (empty files/dirs) and can
+verify it with `check`. It's language-agnostic and intentionally minimal.
