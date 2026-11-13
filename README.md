@@ -39,7 +39,7 @@ To upgrade later use the same install command.
 
 ### Manual
 
-Download the uberscript from the latest release:
+Download the uberscript from the latest release/pre-release:
 
 ```bash
 curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha.1/plad -o plad
