@@ -23,8 +23,6 @@
       (do
         (println "Would create:")
         (doseq [path pending-paths]
-          (println " " path))
-        (println)
-        (println "(dry run, nothing was created)"))
+          (println " " path)))
       (println "Nothing to create, everything already exists."))))
 
