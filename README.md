@@ -108,6 +108,9 @@ Exits with status 0 if everything is present, 1 if anything is missing.
 
 ## Layout file format
 
+> [!NOTE]
+> The EDN format is unstable while `plad` is in alpha and may change between releases.
+
 An EDN map with:
 
 - `:layout` (required) — a vector of nodes.
@@ -150,4 +153,3 @@ Build the uberscript:
 ```bash
 bb build
 ```
-
