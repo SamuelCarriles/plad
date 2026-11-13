@@ -1,7 +1,6 @@
-(ns plad.cli.version
-  (:require [plad.version :as version]))
+(ns plad.cli.version)
 
-(defn command []
+(defn command [version]
   {:cmds ["version"]
    :doc "Print plad version"
-   :fn (fn [_] (version/show!))})
+   :fn (fn [_] (println (format "plad v%s" version)))})

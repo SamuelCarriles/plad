@@ -10,6 +10,8 @@
    [plad.cli.version :as version-cli]
    [plad.validate :as validate]))
 
+(def version "0.1.0-alpha")
+
 (defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
 Returns `data` with `:config` assoc'd. Throws ex-info if the file is
@@ -31,7 +33,7 @@ missing or the config fails validation."
   [(gen-cli/command wrap-handler)
    (check-cli/command wrap-handler)
    (validate-cli/command wrap-handler)
-   (version-cli/command)])
+   (version-cli/command version)])
 
 (defn dispatch
   "Dispatch CLI `args` to the matching subcommand in `table`."
