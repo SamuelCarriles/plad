@@ -1,4 +1,6 @@
 # plad — Project Layout As Data
+![Status](https://img.shields.io/badge/status-alpha-orange)
+![Version](https://img.shields.io/github/v/release/SamuelCarriles/plad?include_prereleases&label=version)
 
 Materialize directory structures and files from EDN blueprints.
 
