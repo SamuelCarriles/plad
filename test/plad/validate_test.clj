@@ -59,7 +59,7 @@
       {:layout [123]}
       {:layout [{:a 1}]}))
 
-  (testing "empty vector as node (missing dir)"
+  (testing "empty vector as node"
     (is (thrown? clojure.lang.ExceptionInfo
                  (validate/layout-config {:layout [[]]}))))
 
@@ -76,4 +76,11 @@
                            (validate/layout-config config))
       {:layout [["src" "core.clj"]]}
       {:layout [["src/" ["utils" "helper.clj"]]]}
-      {:layout [["a/" ["b/" ["c" "d.clj"]]]]})))
+      {:layout [["a/" ["b/" ["c" "d.clj"]]]]}))
+
+  (testing "branch with only one element (missing children)"
+    (are [config] (thrown? clojure.lang.ExceptionInfo
+                           (validate/layout-config config))
+      {:layout [["src/"]]}
+      {:layout [["src/" ["app/"]]]}
+      {:layout [["a/" ["b/" ["c/"]]]]})))

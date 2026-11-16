@@ -6,10 +6,8 @@
 
 (defn run!
   "Run the gen command: build entries and create them (or preview if `:dry-run`)."
-  [{:keys [config dry-run output]}]
-  (let [entries (-> config
-                    :layout
-                    (parse/layout->entries output))]
+  [{:keys [tree dry-run output]}]
+  (let [entries (-> (parse/tree->entries tree output))]
     (if dry-run
       (gen/preview! entries)
       (gen/layout! entries))))

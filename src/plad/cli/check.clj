@@ -11,13 +11,12 @@
 (defn run!
   "Run the check command: compare the layout against the target directory.
   Exits with status 1 if any entry is missing."
-  [{:keys [config target-dir]}]
+  [{:keys [tree target-dir]}]
   (when-not (fs/directory? target-dir)
     (throw (ex-info (format "Target directory not found: %s" target-dir)
                     {:target-dir target-dir})))
-  (let [checked (-> config
-                    :layout
-                    (parse/layout->entries target-dir)
+  (let [checked (-> tree
+                    (parse/tree->entries target-dir)
                     check/check)]
     (println)
     (println (format "Checking layout against %s" target-dir))

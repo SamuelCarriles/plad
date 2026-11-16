@@ -24,26 +24,26 @@
   (testing "marks existing entries as :exists"
     (fs/create-dirs (p "src"))
     (spit (p "deps.edn") "")
-    (let [result (check/check [{:path (p "src") :dir? true}
-                               {:path (p "deps.edn") :dir? false}])]
+    (let [result (check/check [{:path (p "src") :type :dir}
+                               {:path (p "deps.edn") :type :file}])]
       (is (every? #(= :exists (:status %)) result))))
 
   (testing "marks non-existing entries as :missing"
-    (let [result (check/check [{:path (p "nope") :dir? true}
-                               {:path (p "ghost.txt") :dir? false}])]
+    (let [result (check/check [{:path (p "nope") :type :dir}
+                               {:path (p "ghost.txt") :type :file}])]
       (is (every? #(= :missing (:status %)) result))))
 
   (testing "mixed existence is reported per entry"
     (fs/create-dirs (p "src"))
-    (let [result (check/check [{:path (p "src") :dir? true}
-                               {:path (p "missing.txt") :dir? false}])]
+    (let [result (check/check [{:path (p "src") :type :dir}
+                               {:path (p "missing.txt") :type :file}])]
       (is (= [:exists :missing] (map :status result)))))
 
-  (testing "preserves :path and :dir? on each entry"
-    (let [entry {:path (p "foo") :dir? true}
+  (testing "preserves :path and :type on each entry"
+    (let [entry {:path (p "foo") :type :dir}
           [result] (check/check [entry])]
       (is (= (p "foo") (:path result)))
-      (is (true? (:dir? result)))))
+      (is (= :dir (:type result)))))
 
   (testing "returns empty seq for empty input"
     (is (empty? (check/check [])))))
@@ -61,9 +61,9 @@
 
 (deftest report!-test
   (testing "mentions every path in the output"
-    (let [entries [{:path "src" :dir? true :status :exists}
-                   {:path "src/core.clj" :dir? false :status :missing}
-                   {:path "deps.edn" :dir? false :status :exists}]
+    (let [entries [{:path "src" :type :dir :status :exists}
+                   {:path "src/core.clj" :type :file :status :missing}
+                   {:path "deps.edn" :type :file :status :exists}]
           output (with-out-str (check/report! entries))]
       (is (str/includes? output "src/"))
       (is (str/includes? output "src/core.clj"))
@@ -71,22 +71,22 @@
 
   (testing "appends '/' to directory paths"
     (let [output (with-out-str
-                   (check/report! [{:path "src" :dir? true :status :exists}]))]
+                   (check/report! [{:path "src" :type :dir :status :exists}]))]
       (is (str/includes? output "src/"))))
 
   (testing "marks each entry with its status"
     (let [output (with-out-str
-                   (check/report! [{:path "a" :dir? true :status :exists}
-                                   {:path "b" :dir? false :status :missing}]))]
+                   (check/report! [{:path "a" :type :dir :status :exists}
+                                   {:path "b" :type :file :status :missing}]))]
       (is (str/includes? output "[exists]"))
       (is (str/includes? output "[missing]"))))
 
   (testing "summary shows totals, dirs/files breakdown and present/missing"
-    (let [entries [{:path "a" :dir? true :status :exists}
-                   {:path "b" :dir? true :status :missing}
-                   {:path "c" :dir? false :status :exists}
-                   {:path "d" :dir? false :status :exists}
-                   {:path "e" :dir? false :status :missing}]
+    (let [entries [{:path "a" :type :dir :status :exists}
+                   {:path "b" :type :dir :status :missing}
+                   {:path "c" :type :file :status :exists}
+                   {:path "d" :type :file :status :exists}
+                   {:path "e" :type :file :status :missing}]
           output (with-out-str (check/report! entries))]
       (is (str/includes? output "5"))
       (is (str/includes? output "2 dirs"))

@@ -35,7 +35,7 @@
     (spit *tmp-file* "{:layout [\"deps.edn\"]}")
     (let [result (cli/read-config {:file *tmp-file*})]
       (is (= *tmp-file* (:file result)))
-      (is (= {:layout ["deps.edn"]} (:config result)))))
+      (is (= {"deps.edn" {:type :file}} (:tree result)))))
 
   (testing "preserves other keys in data"
     (spit *tmp-file* "{:layout [\"deps.edn\"]}")
@@ -44,7 +44,7 @@
                                    :output "/tmp/foo"})]
       (is (true? (:dry-run result)))
       (is (= "/tmp/foo" (:output result)))
-      (is (= {:layout ["deps.edn"]} (:config result))))))
+      (is (= {"deps.edn" {:type :file}} (:tree result))))))
 
 (deftest wrap-handler-test
   (testing "reads config and passes it to the inner handler"
@@ -52,5 +52,5 @@
     (let [captured (atom nil)
           wrapped (cli/wrap-handler #(reset! captured %))]
       (wrapped {:opts {:file *tmp-file*}})
-      (is (= {:layout ["deps.edn"]} (:config @captured)))
+      (is (= {"deps.edn" {:type :file}} (:tree @captured)))
       (is (= *tmp-file* (:file @captured))))))
