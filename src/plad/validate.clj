@@ -9,8 +9,11 @@
 (expound/defmsg ::spec/dir-node
   "must be a directory path ending with '/' (e.g. \"src/\")")
 
+(expound/defmsg ::spec/invalid-node
+  "must be a string path or a vector (directory with children)")
+
 (expound/defmsg ::spec/branch
-  "must be a vector where the first element is a directory path and the rest are nodes")
+  "must be a vector with a directory path followed by at least one child node (e.g. [\"src/\" \"core.clj\"])")
 
 (expound/defmsg ::spec/node
   "must be a path string or a vector (directory with children)")

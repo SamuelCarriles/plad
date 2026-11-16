@@ -8,21 +8,21 @@
    [plad.cli.gen :as gen-cli]
    [plad.cli.validate :as validate-cli]
    [plad.cli.version :as version-cli]
-   [plad.validate :as validate]))
+   [plad.validate :as validate]
+   [plad.parse :as parse]))
 
-(def version "0.1.0-alpha.1")
+(def version "0.1.0-alpha.1") ;; Needs an update
 
 (defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
-Returns `data` with `:config` assoc'd. Throws ex-info if the file is
+Returns `data` with `:tree` assoc'd. Throws ex-info if the file is
 missing or the config fails validation."
   [{:keys [file] :as data}]
   (when-not (fs/exists? file)
     (throw (ex-info (format "Layout configuration file not found: %s" file) {:file file})))
-  (assoc data :config (-> file
-                          slurp
-                          edn/read-string
-                          validate/layout-config)))
+  (let [config (-> file slurp edn/read-string validate/layout-config)
+        tree (parse/layout->tree (:layout config))]
+    (assoc data :tree tree)))
 
 (defn wrap-handler
   [handler]

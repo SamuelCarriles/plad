@@ -12,13 +12,15 @@
   (map entry-status entries))
 
 (defn- display-path
-  [{:keys [path dir?]}]
-  (if dir? (str path "/") path))
+  [{:keys [path] t :type}]
+  (if (= :dir t) 
+    (str path "/")
+    path))
 
 (defn- summary-line
   [checked]
   (let [total (count checked)
-        dirs (count (filter :dir? checked))
+        dirs (count (filter #(= :dir (:type %)) checked))
         files (- total dirs)
         present (count (filter #(= :exists (:status %)) checked))
         missing (- total present)]

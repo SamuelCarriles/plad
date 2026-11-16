@@ -1,4 +1,5 @@
 (ns plad.node
+  (:refer-clojure :exclude [type])
   (:require [clojure.string :as str]))
 
 (defn str-node?
@@ -17,3 +18,11 @@
   (and
    (str-node? s)
    (str/ends-with? s "/")))
+
+(defn type
+  [node]
+  (cond
+    (dir-node? node) :dir
+    (str-node? node) :file
+    :else 
+    (throw (ex-info "Unknown node type" {:node node}))))

@@ -4,12 +4,12 @@
 
 (s/def ::str-node node/str-node?)
 (s/def ::dir-node node/dir-node?)
-
+(s/def ::invalid-node (fn [_] false))
 (s/def ::branch
   (s/and vector?
          (s/cat
           :dir ::dir-node
-          :children (s/* ::node))))
+          :children (s/+ ::node))))
 
 (defmulti node-type class)
 
@@ -20,6 +20,10 @@
 (defmethod node-type clojure.lang.IPersistentVector
   [_]
   ::branch)
+
+(defmethod node-type :default
+  [_]
+  ::invalid-node)
 
 (s/def ::node
   (s/multi-spec node-type identity))
