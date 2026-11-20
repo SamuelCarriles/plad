@@ -6,8 +6,8 @@
 
 (defn run!
   "Run the gen command: build entries and create them (or preview if `:dry-run`)."
-  [{:keys [tree dry-run output]}]
-  (let [entries (-> (parse/tree->entries tree output))]
+  [{:keys [tree dry-run target-dir]}]
+  (let [entries (-> (parse/tree->entries tree target-dir))]
     (if dry-run
       (gen/preview! entries)
       (gen/layout! entries))))
@@ -24,8 +24,8 @@
           :dry-run {:desc "Show what would be created without creating anything"
                     :coerce :boolean :alias :d}
 
-          :output {:desc "Base directory where the layout will be created"
-                   :default "."
-                   :alias :o}}
+          :target-dir {:desc "Target directory where the layout will be created"
+                       :default "."
+                       :alias :t}}
    :args->opts [:file]
    :fn (wrapper run!)})

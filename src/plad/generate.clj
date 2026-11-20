@@ -33,7 +33,7 @@
         (println "Would create:")
         (doseq [entry actions
                 :when (= :create (:action entry))
-                :let [msg (format " - %-9s %s"
+                :let [msg (format " - %-7s %s"
                                   (str "[" (-> entry :type name) "]")
                                   (:path entry))]]
           (println msg)))

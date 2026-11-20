@@ -1,7 +1,8 @@
 (ns plad.parse
   (:require
    [clojure.string :as str]
-   [plad.node :as node]))
+   [plad.node :as node]
+   [babashka.fs :as fs]))
 
 (defn- insert
   "Adds the path given by `parts` to `tree` as a leaf of `leaf-type`,
@@ -82,11 +83,8 @@
   [layout]
   (reduce #(process-node %1 %2 []) {} layout))
 
-(defn- ->path
-  [parent child]
-  (if (seq parent)
-    (str parent "/" child)
-    child))
+(defn ->path [parent child]
+  (str (fs/path parent child)))
 
 (defn tree->entries
   "Flattens `tree` into a lazy seq of entries (`:children` removed,
