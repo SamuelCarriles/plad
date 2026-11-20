@@ -6,7 +6,6 @@
    [clojure.edn :as edn]
    [plad.cli.check :as check-cli]
    [plad.cli.gen :as gen-cli]
-   [plad.cli.validate :as validate-cli]
    [plad.cli.version :as version-cli]
    [plad.validate :as validate]
    [plad.parse :as parse]))
@@ -30,9 +29,8 @@ missing or the config fails validation."
     (-> opts read-config handler)))
 
 (def table
-  [(gen-cli/command wrap-handler)
-   (check-cli/command wrap-handler)
-   (validate-cli/command wrap-handler)
+  [(check-cli/command wrap-handler)
+   (gen-cli/command wrap-handler)
    (version-cli/command version)])
 
 (defn dispatch
