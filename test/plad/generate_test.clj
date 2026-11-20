@@ -65,7 +65,7 @@
       (spit conflict-file "i am a file")
       (is (thrown-with-msg?
            clojure.lang.ExceptionInfo
-           #"Cannot create .* exists as file but declared as dir"
+           #"Conflict at .* exists as file but declared as dir"
            (gen/layout! [{:path conflict-file :type :dir}]))))))
 
 (deftest preview!-test
@@ -105,5 +105,5 @@
       (spit conflict-file "i am a file")
       (is (thrown-with-msg?
            clojure.lang.ExceptionInfo
-           #"Cannot create .* exists as file but declared as dir"
+           #"Conflict at .* exists as file but declared as dir"
            (gen/preview! [{:path conflict-file :type :dir}]))))))

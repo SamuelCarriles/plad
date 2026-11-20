@@ -1,5 +1,6 @@
 (ns plad.entry
   (:require
+   [clojure.string :as str]
    [babashka.fs :as fs]))
 
 (defn- inspect
@@ -64,4 +65,30 @@
              :error {:code :type-conflict
                      :spec {:type real-type}}))))
 
+(defn- assoc-type-error-msg
+  [{:keys [path error] :as entry}]
+  (let [current (name (get-in error [:spec :type]))
+        declared (name (:type entry))]
+    (assoc-in entry [:error :message]
+              (format "Conflict at '%s': exists as %s but declared as %s"
+                      path current declared))))
 
+(defn throw-type-errors
+  "Throws an ExceptionInfo summarizing all type conflict `errors`,
+ attaching {:errors errors} in ex-data."
+  [errors]
+  (let [messages (map (comp :message :error) errors)
+        summary-msg (str "Layout conflicts detected:\n"
+                         (str/join "\n" (map #(str "  - " %) messages)))]
+    (throw (ex-info summary-msg {:errors errors}))))
+
+(defn analyze-types
+  "Analyzes entries against the filesystem for type conflicts.
+ Throws ex-info if any conflict is found; otherwise returns {:actions [...] :errors []}."
+  [entries]
+  (let [{:keys [errors] :as result} (analyze entries
+                                             [inspect-type]
+                                             {:on-conflict assoc-type-error-msg})]
+    (if (seq errors)
+      (throw-type-errors errors)
+      result)))

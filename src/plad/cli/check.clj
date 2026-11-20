@@ -2,28 +2,19 @@
   (:refer-clojure :exclude [run!])
   (:require [babashka.fs :as fs]
             [plad.parse :as parse]
-            [plad.check :as check]))
-
-(defn missing?
-  [checked]
-  (some #(= :missing (:status %)) checked))
+            [plad.entry :as entry]))
 
 (defn run!
   "Run the check command: compare the layout against the target directory.
   Exits with status 1 if any entry is missing."
-  [{:keys [tree target-dir]}]
-  (when-not (fs/directory? target-dir)
-    (throw (ex-info (format "Target directory not found: %s" target-dir)
-                    {:target-dir target-dir})))
-  (let [checked (-> tree
-                    (parse/tree->entries target-dir)
-                    check/check)]
-    (println)
-    (println (format "Checking layout against %s" target-dir))
-    (println)
-    (check/report! checked)
-    (when (missing? checked)
-      (System/exit 1))))
+  [{:keys [tree no-fs target-dir]}]
+  (when-not no-fs
+    (when-not (fs/directory? target-dir)
+      (throw (ex-info (format "Target directory not found: %s" target-dir)
+                      {:target-dir target-dir})))
+    (-> tree
+        (parse/tree->entries target-dir)
+        entry/analyze-types)))
 
 (defn command
   "Build the babashka.cli spec for `check`.
@@ -33,6 +24,8 @@
    :doc "Check that a layout exists on the filesystem"
    :spec {:file {:desc "Layout configuration file (.edn)"
                  :default "layout.edn"}
+          :no-fs {:desc "Check layout configuration syntax and semantics only"
+                  :coerce :boolean}
           :target-dir {:desc "Directory to check against"
                        :default "."
                        :alias :t}}
