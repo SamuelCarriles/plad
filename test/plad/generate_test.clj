@@ -58,7 +58,15 @@
     (let [file (p "existing.txt")]
       (spit file "original content")
       (gen/layout! [{:path file :type :file}])
-      (is (= "original content" (slurp file))))))
+      (is (= "original content" (slurp file)))))
+
+  (testing "throws exception when conflict exists with filesystem"
+    (let [conflict-file (p "a")]
+      (spit conflict-file "i am a file")
+      (is (thrown-with-msg?
+           clojure.lang.ExceptionInfo
+           #"Cannot create .* exists as file but declared as dir"
+           (gen/layout! [{:path conflict-file :type :dir}]))))))
 
 (deftest preview!-test
   (testing "does not create anything on disk"
@@ -88,6 +96,14 @@
                    (gen/preview! [{:path existing :type :dir}
                                   {:path missing :type :file}]))]
       (is (str/includes? output missing))
-      (let [bullets (filter #(str/starts-with? % "  ")
+      (let [bullets (filter #(str/starts-with? % " - ")
                             (str/split-lines output))]
-        (is (= 1 (count bullets)))))))
+        (is (= 1 (count bullets))))))
+
+  (testing "throws exception when conflict exists with filesystem"
+    (let [conflict-file (p "a")]
+      (spit conflict-file "i am a file")
+      (is (thrown-with-msg?
+           clojure.lang.ExceptionInfo
+           #"Cannot create .* exists as file but declared as dir"
+           (gen/preview! [{:path conflict-file :type :dir}]))))))
