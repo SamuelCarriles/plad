@@ -11,8 +11,6 @@
    [plad.validate :as validate]
    [plad.parse :as parse]))
 
-(def version "0.1.0-alpha.1") ;; Needs an update
-
 (defn read-config
   "Read and validate the EDN layout config from `(:file data)`.
 Returns `data` with `:tree` assoc'd. Throws ex-info if the file is
@@ -33,7 +31,7 @@ missing or the config fails validation."
   [(check/command wrap-handler)
    (gen/command wrap-handler)
    (status/command wrap-handler)
-   (version/command version)])
+   version/command])
 
 (defn dispatch
   "Dispatch CLI `args` to the matching subcommand in `table`."

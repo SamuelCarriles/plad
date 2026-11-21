@@ -1,4 +1,5 @@
 # plad — Project Layout As Data
+
 ![Status](https://img.shields.io/badge/status-alpha-orange)
 ![Version](https://img.shields.io/github/v/release/SamuelCarriles/plad?include_prereleases&label=version)
 
@@ -8,8 +9,7 @@ Materialize directory structures and files from EDN blueprints.
 
 Describing a project's layout in plain data means you can version it, share
 it, and generate it reproducibly. `plad` reads an EDN file and either creates
-the described layout on disk, validates the file, or checks whether the layout
-exists on a given directory.
+the described layout on disk (`gen`), asserts its structure and filesystem compatibility (`check`), or reports on its state (`status`).
 
 Built to scratch my own itch for a simple, scriptable way to bootstrap and
 verify project skeletons.
@@ -39,10 +39,10 @@ To upgrade later use the same install command.
 
 ### Manual
 
-Download the uberscript from the actual latest pre-release:
+Download the uberscript from the latest pre-release:
 
 ```bash
-curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha.1/plad -o plad
+curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha.2/plad -o plad
 chmod +x plad
 ```
 
@@ -90,38 +90,38 @@ README.md
 
 ### `gen`
 
-Generate the layout on disk.
+Generate the layout on disk. Silent on success.
 
 ```bash
-plad gen layout.edn                   # create under current directory
-plad gen layout.edn -o /tmp/foo       # create under a specific directory
-plad gen layout.edn -d                # dry run: print what would be created
+plad gen layout.edn                   # create in current directory
+plad gen layout.edn -t /tmp/foo       # create in a specific directory
+plad gen layout.edn -d                # dry run: preview what would be created
 ```
 
-Files that already exist are left untouched.
+Existing matching files and directories are left untouched. Aborts if a type conflict occurs (e.g. a file exists where a directory is declared).
 
 ### `check`
 
-Compare a layout against the filesystem.
+Pure assertion to validate layout syntax, semantics, and filesystem compatibility. Silent on success.
 
 ```bash
-plad check layout.edn                  # check against current directory
-plad check layout.edn -t /tmp/foo      # check against a specific directory
+plad check layout.edn                 # check layout against current directory
+plad check layout.edn -t /tmp/foo     # check layout against a specific directory
+plad check layout.edn --no-fs         # check syntax & semantics only (ignore filesystem)
 ```
 
-Prints each entry with its status (`[exists]` or `[missing]`) and a summary.
-Exits with status 0 if everything is present, 1 if anything is missing.
+Exits silently with status 0 if valid. Throws an error with details if the target directory does not exist or if there are type conflicts on disk.
 
-### `validate`
+### `status`
 
-Check that a layout file is well-formed.
+Print a human-readable report comparing a layout against the filesystem.
 
 ```bash
-plad validate layout.edn
+plad status layout.edn                # report status against current directory
+plad status layout.edn -t /tmp/foo    # report status against a specific directory
 ```
 
-Exits with status 0 if valid, 1 otherwise. Errors are reported with
-[Expound](https://github.com/bhb/expound).
+Prints each entry with its status (`[exists]`, `[missing]`, or `[conflict]`) followed by a summary breakdown.
 
 ### `version`
 
@@ -178,10 +178,11 @@ Build the uberscript:
 ```bash
 bb build
 ```
+
+This writes plad in the project root, prepends the `#!/usr/bin/env bb` shebang, and sets execute permissions, so you can run it as `./plad`.
+
 ## FAQ
 
 **How is this different from deps-new?**
-
 deps-new generates Clojure projects from templates, including file contents.
-plad declares any directory structure as data (empty files/dirs) and can
-verify it with `check`. It's language-agnostic and intentionally minimal.
+plad declares any directory structure as data (empty files/dirs), asserts it with `check`, and reports on its status with `status`. It's language-agnostic and intentionally minimal.

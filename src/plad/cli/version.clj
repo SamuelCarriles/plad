@@ -1,6 +1,6 @@
 (ns plad.cli.version)
 
-(defn command [version]
+(def command
   {:cmds ["version"]
    :doc "Show plad version"
-   :fn (fn [_] (println (format "plad version %s" version)))})
+   :fn (fn [_] (println "plad version 0.1.0-alpha.2"))})
