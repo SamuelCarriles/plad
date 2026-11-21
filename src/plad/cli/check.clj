@@ -21,13 +21,13 @@
   `wrapper` adapts the handler shape (see plad.cli/wrap-handler)."
   [wrapper]
   {:cmds ["check"]
-   :doc "Check that a layout exists on the filesystem"
+   :doc "Check layout syntax, semantics, and filesystem compatibility"
    :spec {:file {:desc "Layout configuration file (.edn)"
                  :default "layout.edn"}
           :no-fs {:desc "Check layout configuration syntax and semantics only"
                   :coerce :boolean}
           :target-dir {:desc "Directory to check against"
-                       :default "."
+                       :default (fs/cwd)
                        :alias :t}}
    :args->opts [:file]
    :fn (wrapper run!)})

@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [run!])
   (:require
    [plad.parse :as parse]
-   [plad.generate :as gen]))
+   [plad.generate :as gen]
+   [babashka.fs :as fs]))
 
 (defn run!
   "Run the gen command: build entries and create them (or preview if `:dry-run`)."
@@ -25,7 +26,7 @@
                     :coerce :boolean :alias :d}
 
           :target-dir {:desc "Target directory where the layout will be created"
-                       :default "."
+                       :default (fs/cwd)
                        :alias :t}}
    :args->opts [:file]
    :fn (wrapper run!)})
