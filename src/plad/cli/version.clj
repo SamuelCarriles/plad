@@ -3,4 +3,4 @@
 (defn command [version]
   {:cmds ["version"]
    :doc "Print plad version"
-   :fn (fn [_] (println (format "plad v%s" version)))})
+   :fn (fn [_] (println (format "plad version %s" version)))})
