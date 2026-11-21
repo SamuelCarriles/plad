@@ -27,7 +27,7 @@
           :no-fs {:desc "Check layout configuration syntax and semantics only"
                   :coerce :boolean}
           :target-dir {:desc "Directory to check against"
-                       :default "."
+                       :default (fs/cwd)
                        :alias :t}}
    :args->opts [:file]
    :fn (wrapper run!)})

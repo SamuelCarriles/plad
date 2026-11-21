@@ -19,8 +19,8 @@
    :doc "Show status report comparing layout against the filesystem"
    :spec {:file {:desc "Layout configuration file (.edn)"
                  :default "layout.edn"}
-          :target-dir {:desc "Directory to get the status"
-                       :default "."
+          :target-dir {:desc "Directory to inspect"
+                       :default (fs/cwd)
                        :alias :t}}
    :args->opts [:file]
    :fn (wrapper run!)})
