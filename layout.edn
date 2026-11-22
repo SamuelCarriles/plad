@@ -26,7 +26,7 @@
           "README.md"
           "bb.edn"
           "deps.edn"
+          "layout.edn"
           "nix/devshell.nix"
           "flake.lock"
-          "flake.nix"
-          "layout.edn"]}
+          "flake.nix"]}
