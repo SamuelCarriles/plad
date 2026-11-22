@@ -20,6 +20,13 @@ verify project skeletons.
 first. See [Babashka's install
 guide](https://github.com/babashka/babashka#installation).
 
+> [!IMPORTANT]
+> `plad` was developed and tested with **Babashka 1.13.220**. Use that
+> version or newer. On Babashka 1.12.x, running `plad` without arguments or
+> with `--help` prints `nil` instead of the usage, because the `babashka.cli`
+> bundled with that version does not support the built-in help.
+> Check your version with `bb --version`.
+
 ### With bbin (recommended)
 
 [bbin](https://github.com/babashka/bbin) installs Babashka scripts as
@@ -42,7 +49,7 @@ To upgrade later use the same install command.
 Download the uberscript from the latest pre-release:
 
 ```bash
-curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha.2/plad -o plad
+curl -L https://github.com/SamuelCarriles/plad/releases/download/v0.1.0-alpha.3/plad -o plad
 chmod +x plad
 ```
 
