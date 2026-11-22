@@ -1,0 +1,32 @@
+{:doc "plad project layout"
+ :layout [["examples/"
+           "basic.edn"
+           "detailed.edn"]
+          ["src/plad/"
+           ["cli/"
+            "check.clj" "gen.clj" "status.clj" "version.clj"]
+           "validate/specs.clj"
+           "validate.clj"
+           "cli.clj"
+           "core.clj"
+           "entry.clj"
+           "generate.clj"
+           "node.clj"
+           "parse.clj"
+           "status.clj"
+           "validate.clj"]
+
+          ["test/plad/"
+           "cli_test.clj"
+           "entry_test.clj"
+           "generate_test.clj"
+           "parse_test.clj"
+           "status_test.clj"
+           "validate_test.clj"]
+          "README.md"
+          "bb.edn"
+          "deps.edn"
+          "nix/devshell.nix"
+          "flake.lock"
+          "flake.nix"
+          "layout.edn"]}
